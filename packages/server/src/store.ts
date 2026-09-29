@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type Redis from "ioredis";
+import type { Redis } from "ioredis";
 import type { ProtocolStore } from "./types.js";
 
 export function hashOpaqueToken(value: string): string {
