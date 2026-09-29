@@ -1,3 +1,15 @@
+import {
+  Virtualizer,
+  elementScroll,
+  observeElementOffset,
+  observeElementRect,
+} from "https://cdn.jsdelivr.net/npm/@tanstack/virtual-core@3.17.11/+esm";
+
+const PAGE_SIZE = 120;
+const OVERSCAN_ROWS = 3;
+const DESKTOP_MIN_CARD_WIDTH = 190;
+const MOBILE_MIN_CARD_WIDTH = 145;
+
 const rarityLabels = {
   BASIC: "Basic",
   COMMON: "Common",
@@ -27,8 +39,11 @@ const refs = {
   proofKey: el("proof-key"),
   proofHash: el("proof-hash"),
   sourceLabel: el("source-label"),
-  cardsGrid: el("cards-grid"),
+  cardsViewport: el("cards-viewport"),
+  cardsSpacer: el("cards-spacer"),
+  virtualStatus: el("virtual-status"),
   inspector: el("card-inspector"),
+  rawPanel: el("raw-panel"),
   rawJson: el("raw-json"),
   error: el("viewer-error"),
   fileInput: el("file-input"),
@@ -36,7 +51,22 @@ const refs = {
 };
 
 let currentExport = null;
+let cardByInstanceId = new Map();
 let selectedInstanceId = null;
+let loadedCardCount = 0;
+let layout = {
+  columns: 1,
+  gap: 18,
+  rowHeight: 320,
+  rowContentHeight: 302,
+};
+let virtualizer = null;
+let virtualizerCleanup = null;
+let resizeObserver = null;
+let renderFrame = null;
+let loadFrame = null;
+let exportRevision = 0;
+let rawRenderedRevision = -1;
 
 function safeHttpUrl(value) {
   try {
@@ -257,6 +287,7 @@ function createCard(card) {
   button.dataset.rarity = visual.rarity;
   button.dataset.cardEffect = "catalog";
   button.dataset.instanceId = text(card.instanceId, "");
+  button.dataset.selected = String(card.instanceId === selectedInstanceId);
   button.setAttribute("aria-label", `Inspect ${text(card.definition?.presentation?.title, "card")}`);
   button.addEventListener("click", () => selectCard(card.instanceId));
 
@@ -304,7 +335,14 @@ function createCard(card) {
     img.alt = text(card.definition?.presentation?.title, "Card artwork");
     img.loading = "lazy";
     img.decoding = "async";
-    img.addEventListener("error", () => img.remove());
+    img.fetchPriority = "low";
+    img.addEventListener("load", () => {
+      fallback.hidden = true;
+    });
+    img.addEventListener("error", () => {
+      img.remove();
+      fallback.hidden = false;
+    });
     art.appendChild(img);
   }
 
@@ -403,52 +441,235 @@ function renderInspector(card) {
 
 function selectCard(instanceId) {
   selectedInstanceId = instanceId;
-  const cards = currentExport?.payload?.collection?.cards ?? [];
-  const card = cards.find((entry) => entry.instanceId === instanceId);
-  for (const node of refs.cardsGrid.querySelectorAll(".wiki-card")) {
+  const card = cardByInstanceId.get(instanceId);
+  for (const node of refs.cardsSpacer.querySelectorAll(".wiki-card")) {
     node.dataset.selected = String(node.dataset.instanceId === instanceId);
   }
   if (card) renderInspector(card);
 }
 
-function renderCards(exported) {
-  refs.cardsGrid.replaceChildren();
-  const cards = exported.payload.collection.cards;
+function computeLayout() {
+  const width = Math.max(1, refs.cardsViewport.clientWidth - 20);
+  const mobile = width < 620;
+  const gap = mobile ? 10 : 18;
+  const minCardWidth = mobile ? MOBILE_MIN_CARD_WIDTH : DESKTOP_MIN_CARD_WIDTH;
+  const columns = Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)));
+  const cardWidth = (width - Math.max(0, columns - 1) * gap) / columns;
+  const metaHeight = width <= 400 ? 0 : 26;
+  const cardHeight = cardWidth / 0.715;
+  const rowContentHeight = Math.ceil(cardHeight + metaHeight);
+  const rowHeight = Math.ceil(rowContentHeight + gap);
 
-  for (const card of cards) refs.cardsGrid.appendChild(createCard(card));
+  return { columns, gap, rowHeight, rowContentHeight };
+}
 
-  if (cards.length > 0) {
-    const selection = cards.some((card) => card.instanceId === selectedInstanceId)
-      ? selectedInstanceId
-      : cards[0].instanceId;
-    selectCard(selection);
-  } else {
-    selectedInstanceId = null;
-    refs.inspector.replaceChildren();
-    const empty = document.createElement("div");
-    empty.className = "inspector-empty";
-    const strong = document.createElement("strong");
-    strong.textContent = "Empty collection";
-    const paragraph = document.createElement("p");
-    paragraph.textContent = "This snapshot does not contain any cards.";
-    empty.append(strong, paragraph);
-    refs.inspector.appendChild(empty);
+function totalCards() {
+  return currentExport?.payload?.collection?.cards?.length ?? 0;
+}
+
+function loadedRows() {
+  return Math.ceil(loadedCardCount / layout.columns);
+}
+
+function destroyVirtualizer() {
+  if (virtualizerCleanup) virtualizerCleanup();
+  virtualizerCleanup = null;
+  virtualizer = null;
+  if (renderFrame !== null) cancelAnimationFrame(renderFrame);
+  if (loadFrame !== null) cancelAnimationFrame(loadFrame);
+  renderFrame = null;
+  loadFrame = null;
+}
+
+function scheduleVirtualRender() {
+  if (renderFrame !== null) return;
+  renderFrame = requestAnimationFrame(() => {
+    renderFrame = null;
+    renderVirtualRows();
+  });
+}
+
+function syncVirtualizerCount() {
+  if (!virtualizer) return;
+  virtualizer.setOptions({
+    ...virtualizer.options,
+    count: loadedRows(),
+    estimateSize: () => layout.rowHeight,
+  });
+  virtualizer._willUpdate();
+  scheduleVirtualRender();
+}
+
+function mountVirtualizer({ resetScroll = false } = {}) {
+  destroyVirtualizer();
+  layout = computeLayout();
+
+  if (resetScroll) refs.cardsViewport.scrollTop = 0;
+
+  virtualizer = new Virtualizer({
+    count: loadedRows(),
+    getScrollElement: () => refs.cardsViewport,
+    estimateSize: () => layout.rowHeight,
+    overscan: OVERSCAN_ROWS,
+    observeElementRect,
+    observeElementOffset,
+    scrollToFn: elementScroll,
+    onChange: () => scheduleVirtualRender(),
+  });
+
+  virtualizerCleanup = virtualizer._didMount();
+  virtualizer._willUpdate();
+  scheduleVirtualRender();
+}
+
+function maybeLoadMore(virtualItems) {
+  const total = totalCards();
+  if (loadedCardCount >= total || virtualItems.length === 0 || loadFrame !== null) return;
+
+  const lastRow = virtualItems[virtualItems.length - 1];
+  if (lastRow.index < loadedRows() - 3) return;
+
+  loadFrame = requestAnimationFrame(() => {
+    loadFrame = null;
+    loadedCardCount = Math.min(total, loadedCardCount + PAGE_SIZE);
+    syncVirtualizerCount();
+  });
+}
+
+function updateVirtualStatus(renderedCards) {
+  const total = totalCards();
+  const loaded = Math.min(loadedCardCount, total);
+  const suffix = loaded < total ? " · loads more near the end" : " · all data available";
+  refs.virtualStatus.textContent =
+    `${loaded.toLocaleString()} / ${total.toLocaleString()} cards staged · ${renderedCards} cards in DOM${suffix}`;
+}
+
+function renderVirtualRows() {
+  if (!virtualizer) return;
+
+  const items = virtualizer.getVirtualItems();
+  const totalSize = Math.max(virtualizer.getTotalSize(), refs.cardsViewport.clientHeight);
+  refs.cardsSpacer.style.height = totalSize + "px";
+
+  const cards = currentExport?.payload?.collection?.cards ?? [];
+  const fragment = document.createDocumentFragment();
+  let renderedCards = 0;
+
+  for (const item of items) {
+    const row = document.createElement("div");
+    row.className = "virtual-row";
+    row.dataset.index = String(item.index);
+    row.style.transform = `translateY(${item.start}px)`;
+    row.style.height = layout.rowContentHeight + "px";
+    row.style.setProperty("--virtual-columns", String(layout.columns));
+    row.style.setProperty("--virtual-gap", layout.gap + "px");
+
+    const start = item.index * layout.columns;
+    const end = Math.min(start + layout.columns, loadedCardCount, cards.length);
+
+    for (let index = start; index < end; index += 1) {
+      row.appendChild(createCard(cards[index]));
+      renderedCards += 1;
+    }
+
+    fragment.appendChild(row);
   }
+
+  refs.cardsSpacer.replaceChildren(fragment);
+  updateVirtualStatus(renderedCards);
+  maybeLoadMore(items);
+}
+
+function setupResizeObserver() {
+  resizeObserver?.disconnect();
+  let resizeFrame = null;
+
+  resizeObserver = new ResizeObserver(() => {
+    if (resizeFrame !== null) cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = null;
+      const next = computeLayout();
+      const changed =
+        next.columns !== layout.columns ||
+        Math.abs(next.rowHeight - layout.rowHeight) > 1;
+
+      if (!changed) return;
+
+      layout = next;
+      if (virtualizer) {
+        virtualizer.setOptions({
+          ...virtualizer.options,
+          count: loadedRows(),
+          estimateSize: () => layout.rowHeight,
+        });
+        virtualizer._willUpdate();
+        virtualizer.measure();
+      }
+      scheduleVirtualRender();
+    });
+  });
+
+  resizeObserver.observe(refs.cardsViewport);
+}
+
+function renderEmptyInspector() {
+  selectedInstanceId = null;
+  refs.inspector.replaceChildren();
+  const empty = document.createElement("div");
+  empty.className = "inspector-empty";
+  const strong = document.createElement("strong");
+  strong.textContent = "Empty collection";
+  const paragraph = document.createElement("p");
+  paragraph.textContent = "This snapshot does not contain any cards.";
+  empty.append(strong, paragraph);
+  refs.inspector.appendChild(empty);
+}
+
+function renderCards(exported) {
+  const cards = exported.payload.collection.cards;
+  cardByInstanceId = new Map(cards.map((card) => [card.instanceId, card]));
+  loadedCardCount = Math.min(cards.length, PAGE_SIZE);
+  refs.cardsSpacer.replaceChildren();
+
+  if (cards.length === 0) {
+    destroyVirtualizer();
+    refs.cardsSpacer.style.height = "100%";
+    updateVirtualStatus(0);
+    renderEmptyInspector();
+    return;
+  }
+
+  const selection = cards.some((card) => card.instanceId === selectedInstanceId)
+    ? selectedInstanceId
+    : cards[0].instanceId;
+  selectCard(selection);
+
+  mountVirtualizer({ resetScroll: true });
+}
+
+function renderRawJsonIfNeeded() {
+  if (!refs.rawPanel.open || !currentExport || rawRenderedRevision === exportRevision) return;
+  refs.rawJson.textContent = JSON.stringify(currentExport, null, 2);
+  rawRenderedRevision = exportRevision;
 }
 
 function render(exported, sourceLabel) {
   currentExport = validateEnvelope(exported);
+  exportRevision += 1;
+  rawRenderedRevision = -1;
+  refs.rawJson.textContent = "";
   refs.error.hidden = true;
   refs.sourceLabel.textContent = sourceLabel;
   setSummary(currentExport);
   renderCards(currentExport);
-  refs.rawJson.textContent = JSON.stringify(currentExport, null, 2);
+  renderRawJsonIfNeeded();
 }
 
 async function loadDemo() {
   try {
     const response = await fetch("./sample-export.json", { cache: "no-store" });
     if (!response.ok) throw new Error("Unable to load the bundled demo export.");
+    selectedInstanceId = null;
     render(await response.json(), "Bundled demo export");
   } catch (error) {
     showError(error);
@@ -481,4 +702,12 @@ refs.resetDemo.addEventListener("click", () => {
   void loadDemo();
 });
 
+refs.rawPanel.addEventListener("toggle", renderRawJsonIfNeeded);
+
+window.addEventListener("beforeunload", () => {
+  resizeObserver?.disconnect();
+  destroyVirtualizer();
+});
+
+setupResizeObserver();
 void loadDemo();
