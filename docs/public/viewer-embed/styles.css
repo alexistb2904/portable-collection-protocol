@@ -1021,3 +1021,85 @@ body.embedded-viewer {
 .embedded-viewer .intro {
   margin-top: 0;
 }
+
+
+.viewer-actions {
+  margin-top: 28px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(14, 27, 22, .9);
+}
+
+.viewer-actions-copy strong,
+.viewer-actions-copy span {
+  display: block;
+}
+
+.viewer-actions-copy strong {
+  color: #eef4f0;
+  font-size: 12px;
+}
+
+.viewer-actions-copy span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.viewer-actions-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.viewer-actions-buttons button,
+.viewer-actions-buttons .file-action {
+  min-height: 40px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #395548;
+  border-radius: 9px;
+  background: #12231c;
+  color: #dce7e1;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.viewer-actions-buttons .file-action {
+  border-color: #668b78;
+  background: #244735;
+  color: #f3f7f5;
+}
+
+.viewer-actions-buttons button:hover,
+.viewer-actions-buttons .file-action:hover {
+  border-color: #86ad99;
+  background: #294c3b;
+}
+
+@media (max-width: 620px) {
+  .viewer-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .viewer-actions-buttons {
+    width: 100%;
+  }
+
+  .viewer-actions-buttons button,
+  .viewer-actions-buttons .file-action {
+    flex: 1;
+  }
+}
