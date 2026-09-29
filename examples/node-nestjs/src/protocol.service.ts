@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import Redis from "ioredis";
+import { Redis } from "ioredis";
 import { signCollection } from "@wikicard/portable-collection-core";
 import {
 	CollectionAuthorizationServer,

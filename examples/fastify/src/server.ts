@@ -1,5 +1,5 @@
 import Fastify from "fastify";
-import Redis from "ioredis";
+import { Redis } from "ioredis";
 import {
 	signCollection,
 	type SignedCollection,

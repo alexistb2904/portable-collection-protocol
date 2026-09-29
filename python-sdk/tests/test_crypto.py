@@ -22,7 +22,7 @@ def empty_payload() -> CollectionPayload:
         exportId=str(uuid.uuid4()),
         issuer=IssuerIdentity(id="https://source.example/api", name="Source"),
         subject=SubjectIdentity(id="https://source.example/api:user:123", username="alice"),
-        issuedAt=datetime.now(timezone.utc),
+        issuedAt=datetime.now(timezone.utc).isoformat(),
         collection=CollectionBody(count=0, cards=[]),
     )
 
@@ -53,8 +53,8 @@ def test_import_authorization_binds_destination_account():
             destinationAccount="https://destination.example/api:user:abc",
             requestedExportHash="A" * 43,
             liveCollectionHash="B" * 43,
-            issuedAt=now,
-            expiresAt=now + timedelta(minutes=5),
+            issuedAt=now.isoformat(),
+            expiresAt=(now + timedelta(minutes=5)).isoformat(),
         ),
         private_key,
     )
