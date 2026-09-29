@@ -25,6 +25,18 @@
       </div>
     </section>
 
+    <section class="viewer-actions" aria-label="Viewer actions">
+      <div class="viewer-actions-copy">
+        <strong>Open an export</strong>
+        <span>Select a portable collection JSON file. It stays entirely in your browser.</span>
+      </div>
+      <div class="viewer-actions-buttons">
+        <label class="file-action" for="file-input">Open local export</label>
+        <input id="file-input" type="file" accept="application/json,.json" hidden>
+        <button id="reset-demo" type="button">Load demo</button>
+      </div>
+    </section>
+
     <section class="summary-grid" aria-label="Export summary">
       <article class="summary-card">
         <span>Issuer</span>
