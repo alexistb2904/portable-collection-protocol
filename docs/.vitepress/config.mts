@@ -10,7 +10,7 @@ export default defineConfig({
 			{ text: "Guide", link: "/quick-start" },
 			{ text: "Protocol", link: "/protocol" },
 			{ text: "Security", link: "/security" },
-			{ text: "Export Viewer", link: "/viewer/" },
+			{ text: "Export Viewer", link: "/viewer" },
 			{ text: "AI Prompt", link: "/ai-integration-prompt" },
 		],
 		sidebar: [
@@ -22,6 +22,7 @@ export default defineConfig({
 					{ text: "Integration Guide", link: "/integration-guide" },
 					{ text: "Framework Examples", link: "/framework-examples" },
 					{ text: "Card Model", link: "/card-model" },
+					{ text: "Export Viewer", link: "/viewer" },
 				],
 			},
 			{
