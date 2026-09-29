@@ -694,31 +694,37 @@ function showError(error) {
   refs.error.hidden = false;
 }
 
-refs.fileInput.addEventListener("change", async () => {
-  const file = refs.fileInput.files?.[0];
-  if (!file) return;
+if (refs.fileInput) {
+  refs.fileInput.addEventListener("change", async () => {
+    const file = refs.fileInput.files?.[0];
+    if (!file) return;
 
-  try {
-    if (file.size > 16 * 1024 * 1024) throw new Error("The viewer limits local files to 16 MiB.");
-    const parsed = JSON.parse(await file.text());
+    try {
+      if (file.size > 16 * 1024 * 1024) throw new Error("The viewer limits local files to 16 MiB.");
+      const parsed = JSON.parse(await file.text());
+      selectedInstanceId = null;
+      render(parsed, `Local file · ${file.name}`);
+    } catch (error) {
+      showError(error);
+    } finally {
+      refs.fileInput.value = "";
+    }
+  });
+}
+
+if (refs.resetDemo) {
+  refs.resetDemo.addEventListener("click", () => {
     selectedInstanceId = null;
-    render(parsed, `Local file · ${file.name}`);
-  } catch (error) {
-    showError(error);
-  } finally {
-    refs.fileInput.value = "";
-  }
-});
+    void loadDemo();
+  });
+}
 
-refs.resetDemo.addEventListener("click", () => {
-  selectedInstanceId = null;
-  void loadDemo();
-});
-
-refs.rawPanel.addEventListener("toggle", () => {
-  renderRawJsonIfNeeded();
-  requestAnimationFrame(notifyHostHeight);
-});
+if (refs.rawPanel) {
+  refs.rawPanel.addEventListener("toggle", () => {
+    renderRawJsonIfNeeded();
+    requestAnimationFrame(notifyHostHeight);
+  });
+}
 
 window.addEventListener("beforeunload", () => {
   resizeObserver?.disconnect();
