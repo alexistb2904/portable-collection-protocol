@@ -90,7 +90,15 @@
       </div>
 
       <div class="collection-layout">
-        <div id="cards-grid" class="cards-grid" aria-live="polite"></div>
+        <div class="cards-browser">
+          <div id="cards-viewport" class="cards-viewport" aria-label="Virtualized card collection">
+            <div id="cards-spacer" class="cards-spacer"></div>
+          </div>
+          <div class="virtual-footer">
+            <span id="virtual-status">Preparing collection…</span>
+            <span class="virtual-engine">TanStack Virtual</span>
+          </div>
+        </div>
         <aside id="card-inspector" class="card-inspector">
           <div class="inspector-empty">
             <span class="inspector-icon">↗</span>
@@ -101,7 +109,7 @@
       </div>
     </section>
 
-    <details class="raw-panel">
+    <details id="raw-panel" class="raw-panel">
       <summary>
         <span>Raw JSON</span>
         <small>Exact data currently shown by the viewer</small>
