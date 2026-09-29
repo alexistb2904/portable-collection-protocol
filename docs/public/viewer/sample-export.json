@@ -33,7 +33,7 @@
             "presentation": {
               "title": "Albert Einstein",
               "description": "German-born theoretical physicist",
-              "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Albert_Einstein_Head.jpg"
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Albert_Einstein_Head.jpg?width=900"
             }
           },
           "extensions": {
@@ -65,7 +65,7 @@
             "presentation": {
               "title": "Marie Curie",
               "description": "Polish and naturalized-French physicist and chemist",
-              "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Marie_Curie_c._1920s.jpg"
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Portrait_of_Marie_Curie.jpg?width=900"
             }
           },
           "extensions": {
@@ -97,7 +97,7 @@
             "presentation": {
               "title": "Ada Lovelace",
               "description": "English mathematician and writer",
-              "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Ada_Lovelace_portrait.jpg"
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ada_Lovelace_portrait.jpg?width=900"
             }
           },
           "extensions": {
@@ -129,7 +129,7 @@
             "presentation": {
               "title": "Alan Turing",
               "description": "English mathematician and computer scientist",
-              "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Alan_Turing_Aged_16.jpg"
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Alan_Turing_Aged_16.jpg?width=900"
             }
           },
           "extensions": {
@@ -161,7 +161,7 @@
             "presentation": {
               "title": "Eiffel Tower",
               "description": "Wrought-iron lattice tower in Paris, France",
-              "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Tour_Eiffel_Wikimedia_Commons.jpg"
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/EiffelTower.jpg?width=900"
             }
           },
           "extensions": {
