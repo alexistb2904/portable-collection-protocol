@@ -1,0 +1,18 @@
+{
+  "canonicalization": "WIKICARD-C14N-JSON-1",
+  "cases": [
+    {
+      "name": "basic-order-and-number",
+      "input": {
+        "b": 2,
+        "a": [
+          1,
+          0.5
+        ],
+        "c": "hi"
+      },
+      "canonical": "{\"a\":[1,0.5],\"b\":2,\"c\":\"hi\"}",
+      "sha256Hex": "54927d21fad3946f67210fdacd35b9eecc06842b4a0c4fcf33e382a301f7246f"
+    }
+  ]
+}

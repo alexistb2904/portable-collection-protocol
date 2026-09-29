@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wikicard:schema:collection-export:1.0.0",
+  "title": "WikiCard Portable Collection Export v1",
+  "type": "object",
+  "required": [
+    "payload",
+    "proof"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "payload": {
+      "type": "object",
+      "required": [
+        "format",
+        "version",
+        "exportId",
+        "issuer",
+        "subject",
+        "issuedAt",
+        "collection"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "org.wikicard.collection"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "exportId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "issuer": {
+          "type": "object",
+          "required": [
+            "id",
+            "name"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uri"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "subject": {
+          "type": "object",
+          "required": [
+            "id",
+            "username"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
+        },
+        "issuedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "collection": {
+          "type": "object",
+          "required": [
+            "count",
+            "cards"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cards": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "instanceId",
+                  "serialNumber",
+                  "mintedAt",
+                  "definition",
+                  "extensions"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "instanceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "serialNumber": {
+                    "type": "string",
+                    "pattern": "^[0-9]+$"
+                  },
+                  "mintedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "definition": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "canonicalId",
+                      "wikidataId",
+                      "source",
+                      "presentation"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "canonicalId": {
+                        "type": "string"
+                      },
+                      "wikidataId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "pattern": "^Q[1-9][0-9]*$"
+                      },
+                      "source": {
+                        "type": "object",
+                        "required": [
+                          "provider",
+                          "language",
+                          "pageId",
+                          "url"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "provider": {
+                            "const": "wikipedia"
+                          },
+                          "language": {
+                            "type": "string"
+                          },
+                          "pageId": {
+                            "type": "string",
+                            "pattern": "^[0-9]+$"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        }
+                      },
+                      "presentation": {
+                        "type": "object",
+                        "required": [
+                          "title",
+                          "description",
+                          "imageUrl"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "title": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "imageUrl": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "extensions": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "properties": {
+                      "org.wikicard.game.v1": {
+                        "type": "object",
+                        "required": [
+                          "rarity",
+                          "rarityVersion",
+                          "attack",
+                          "defense",
+                          "power",
+                          "statsVersion"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "rarity": {
+                            "type": "string"
+                          },
+                          "rarityVersion": {
+                            "type": "string"
+                          },
+                          "attack": {
+                            "type": "integer"
+                          },
+                          "defense": {
+                            "type": "integer"
+                          },
+                          "power": {
+                            "type": "integer"
+                          },
+                          "statsVersion": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "proof": {
+      "type": "object",
+      "required": [
+        "type",
+        "algorithm",
+        "canonicalization",
+        "keyId",
+        "payloadHash",
+        "signature"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "Ed25519Signature"
+        },
+        "algorithm": {
+          "const": "Ed25519"
+        },
+        "canonicalization": {
+          "const": "WIKICARD-C14N-JSON-1"
+        },
+        "keyId": {
+          "type": "string",
+          "pattern": "^ed25519-sha256-"
+        },
+        "payloadHash": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      }
+    }
+  }
+}

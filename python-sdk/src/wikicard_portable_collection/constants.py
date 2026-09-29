@@ -1,0 +1,9 @@
+COLLECTION_FORMAT = "org.wikicard.collection"
+COLLECTION_VERSION = "1.0.0"
+CANONICALIZATION = "WIKICARD-C14N-JSON-1"
+COLLECTION_SIGNATURE_CONTEXT = "WikiCard Collection Export v1\n"
+
+AUTHORIZATION_PROTOCOL = "WIKICARD-AUTH-CODE-1"
+AUTHORIZATION_FORMAT = "org.wikicard.collection-import-authorization"
+AUTHORIZATION_VERSION = "1.0.0"
+AUTHORIZATION_SIGNATURE_CONTEXT = "WikiCard Collection Import Authorization v1\n"

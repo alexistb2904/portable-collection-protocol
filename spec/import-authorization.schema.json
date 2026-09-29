@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wikicard:schema:collection-import-authorization:1.0.0",
+  "title": "WikiCard Collection Import Authorization v1",
+  "type": "object",
+  "required": [
+    "payload",
+    "proof"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "payload": {
+      "type": "object",
+      "required": [
+        "format",
+        "version",
+        "authorizationId",
+        "issuer",
+        "subjectId",
+        "audience",
+        "destinationAccount",
+        "requestedExportHash",
+        "liveCollectionHash",
+        "issuedAt",
+        "expiresAt"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "org.wikicard.collection-import-authorization"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "authorizationId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "issuer": {
+          "type": "string",
+          "format": "uri"
+        },
+        "subjectId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audience": {
+          "type": "string",
+          "format": "uri"
+        },
+        "destinationAccount": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requestedExportHash": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "liveCollectionHash": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "issuedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "proof": {
+      "type": "object",
+      "required": [
+        "type",
+        "algorithm",
+        "canonicalization",
+        "keyId",
+        "payloadHash",
+        "signature"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "Ed25519Signature"
+        },
+        "algorithm": {
+          "const": "Ed25519"
+        },
+        "canonicalization": {
+          "const": "WIKICARD-C14N-JSON-1"
+        },
+        "keyId": {
+          "type": "string",
+          "pattern": "^ed25519-sha256-"
+        },
+        "payloadHash": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      }
+    }
+  }
+}

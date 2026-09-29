@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Import portable collection</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main>
+    <small>PORTABLE COLLECTION PROTOCOL</small>
+    <h1>Link a collection</h1>
+    <p>Select a signed collection export. Your server will verify the issuer before any live authorization begins.</p>
+    <input id="file" type="file" accept="application/json,.json">
+    <p id="error" class="error hidden"></p>
+    <div class="actions">
+      <button id="start" class="primary" type="button">Continue</button>
+    </div>
+  </main>
+  <script type="module" src="./destination-import.js"></script>
+</body>
+</html>

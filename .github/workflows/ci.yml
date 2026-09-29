@@ -1,0 +1,60 @@
+name: Protocol CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Build
+        run: pnpm build
+
+      - name: Typecheck
+        run: pnpm -r typecheck
+
+      - name: Tests
+        run: pnpm -r test
+
+      - name: Build docs
+        run: pnpm docs:build
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python SDK and examples
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e "./python-sdk[dev]"
+          (cd examples/python-fastapi && pip install -r requirements.txt)
+          (cd examples/python-flask && pip install -r requirements.txt)
+          (cd examples/python-django && pip install -r requirements.txt)
+
+      - name: Python tests
+        run: pytest python-sdk/tests
+
+      - name: Compile Python examples
+        run: |
+          python -m compileall python-sdk/src
+          python -m compileall examples/python-fastapi
+          python -m compileall examples/python-flask
+          python -m compileall examples/python-django

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Authorize collection access</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main>
+    <small>PORTABLE COLLECTION PROTOCOL</small>
+    <h1>Authorize collection access</h1>
+    <p id="summary">Validating this request…</p>
+    <div id="details" class="notice hidden"></div>
+    <p id="error" class="error hidden"></p>
+    <div class="actions">
+      <button id="deny" type="button">Deny</button>
+      <button id="allow" class="primary" type="button" disabled>Allow once</button>
+    </div>
+  </main>
+  <script type="module" src="./issuer-consent.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+-e ../../python-sdk
+fastapi>=0.141.1
+uvicorn[standard]>=0.36.0
+python-dotenv>=1.1.1
