@@ -63,6 +63,11 @@ jobs:
       - name: Install
         run: pnpm install --no-frozen-lockfile --allow-build=esbuild
 
+      - name: Check static viewer
+        run: |
+          node --check docs/public/viewer/viewer.js
+          node -e "JSON.parse(require('node:fs').readFileSync('docs/public/viewer/sample-export.json','utf8'))"
+
       - name: Build docs
         run: pnpm docs:build
 

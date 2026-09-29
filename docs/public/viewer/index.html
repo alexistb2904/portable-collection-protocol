@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Static viewer for WikiCard Portable Collection Protocol exports">
+  <title>Portable Collection Export Viewer</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="viewer-header">
+    <a class="brand" href="../">
+      <span class="brand-mark">W</span>
+      <span>
+        <strong>Portable Collection Protocol</strong>
+        <small>Export Viewer</small>
+      </span>
+    </a>
+    <div class="header-actions">
+      <label class="file-action" for="file-input">Open local export</label>
+      <input id="file-input" type="file" accept="application/json,.json" hidden>
+      <button id="reset-demo" type="button">Load demo</button>
+    </div>
+  </header>
+
+  <main class="viewer-shell">
+    <section class="intro">
+      <div>
+        <span class="eyebrow">STATIC PROTOCOL DEMO</span>
+        <h1>See what a portable collection export contains.</h1>
+        <p>
+          This page visualizes the JSON produced by a compatible issuer. It runs entirely in your browser:
+          local files are never uploaded.
+        </p>
+      </div>
+      <div class="viewer-warning">
+        <strong>Viewer only</strong>
+        <span>This page displays the data and proof envelope. It does not cryptographically verify ownership or signatures.</span>
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="Export summary">
+      <article class="summary-card">
+        <span>Issuer</span>
+        <strong id="issuer-name">—</strong>
+        <a id="issuer-id" href="#" target="_blank" rel="noreferrer">—</a>
+      </article>
+      <article class="summary-card">
+        <span>Subject</span>
+        <strong id="subject-name">—</strong>
+        <code id="subject-id">—</code>
+      </article>
+      <article class="summary-card">
+        <span>Snapshot</span>
+        <strong id="issued-at">—</strong>
+        <code id="export-id">—</code>
+      </article>
+      <article class="summary-card">
+        <span>Collection</span>
+        <strong id="card-count">0 cards</strong>
+        <small id="format-version">—</small>
+      </article>
+    </section>
+
+    <section class="proof-panel">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">PROOF ENVELOPE</span>
+          <h2>Signature metadata</h2>
+        </div>
+        <span class="proof-state">Present · not verified here</span>
+      </div>
+      <div class="proof-grid">
+        <div><span>Type</span><code id="proof-type">—</code></div>
+        <div><span>Algorithm</span><code id="proof-algorithm">—</code></div>
+        <div><span>Canonicalization</span><code id="proof-canonicalization">—</code></div>
+        <div><span>Key ID</span><code id="proof-key">—</code></div>
+        <div class="wide"><span>Payload hash</span><code id="proof-hash">—</code></div>
+      </div>
+    </section>
+
+    <section class="collection-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">COLLECTION DATA</span>
+          <h2>Cards in this snapshot</h2>
+        </div>
+        <span id="source-label" class="source-label">Bundled demo export</span>
+      </div>
+
+      <div class="collection-layout">
+        <div id="cards-grid" class="cards-grid" aria-live="polite"></div>
+        <aside id="card-inspector" class="card-inspector">
+          <div class="inspector-empty">
+            <span class="inspector-icon">↗</span>
+            <strong>Select a card</strong>
+            <p>Its portable identity, source and extension data will appear here.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <details class="raw-panel">
+      <summary>
+        <span>Raw JSON</span>
+        <small>Exact data currently shown by the viewer</small>
+      </summary>
+      <pre id="raw-json"></pre>
+    </details>
+
+    <section class="explanation-grid">
+      <article>
+        <span>01</span>
+        <h3>Issuer</h3>
+        <p>The service that signed the snapshot and remains authoritative for its collection.</p>
+      </article>
+      <article>
+        <span>02</span>
+        <h3>Subject</h3>
+        <p>The source account represented by this export. A file alone does not prove the uploader controls it today.</p>
+      </article>
+      <article>
+        <span>03</span>
+        <h3>Canonical identity</h3>
+        <p>Cards use identities such as <code>wikidata:Q937</code> so different services can recognize the same concept.</p>
+      </article>
+      <article>
+        <span>04</span>
+        <h3>Extensions</h3>
+        <p>Game-specific values such as WikiCard rarity and stats live in namespaced extension data.</p>
+      </article>
+    </section>
+
+    <p id="viewer-error" class="viewer-error" role="alert" hidden></p>
+  </main>
+
+  <footer class="viewer-footer">
+    <span>Portable Collection Protocol · static export viewer</span>
+    <a href="https://github.com/alexistb2904/portable-collection-protocol" target="_blank" rel="noreferrer">GitHub repository</a>
+  </footer>
+
+  <script type="module" src="./viewer.js"></script>
+</body>
+</html>

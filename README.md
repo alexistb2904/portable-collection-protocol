@@ -13,6 +13,14 @@ That is why the protocol has two layers:
 
 The project includes production-oriented SDKs, framework examples, machine-readable schemas, security guidance and a developer documentation website.
 
+### Live export viewer
+
+A static browser-only viewer is included for understanding the data produced by an export:
+
+**https://alexistb2904.github.io/portable-collection-protocol/viewer/**
+
+It loads a representative demo by default and can open a local export without uploading it anywhere. The viewer displays the proof envelope but deliberately does **not** claim cryptographic verification or current ownership.
+
 ---
 
 ## Quick example

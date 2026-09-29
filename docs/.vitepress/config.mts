@@ -1,6 +1,7 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
+	base: process.env.DOCS_BASE ?? "/",
 	title: "Portable Collection Protocol",
 	description: "Signed collectible exports and live ownership authorization",
 	cleanUrls: true,
@@ -9,6 +10,7 @@ export default defineConfig({
 			{ text: "Guide", link: "/quick-start" },
 			{ text: "Protocol", link: "/protocol" },
 			{ text: "Security", link: "/security" },
+			{ text: "Export Viewer", link: "/viewer/" },
 			{ text: "AI Prompt", link: "/ai-integration-prompt" },
 		],
 		sidebar: [
