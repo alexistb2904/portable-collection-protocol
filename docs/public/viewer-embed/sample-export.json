@@ -1,0 +1,189 @@
+{
+  "payload": {
+    "format": "org.wikicard.collection",
+    "version": "1.0.0",
+    "exportId": "a9dc1f8d-2b68-4ac8-a53a-a032f144eb39",
+    "issuer": {
+      "id": "https://cards.alexistb.com/api",
+      "name": "WikiCard"
+    },
+    "subject": {
+      "id": "https://cards.alexistb.com/api:user:demo-user",
+      "username": "protocol_demo"
+    },
+    "issuedAt": "2026-09-29T19:30:00.000Z",
+    "collection": {
+      "count": 5,
+      "cards": [
+        {
+          "id": "urn:uuid:76a82a43-598e-47b5-90db-418445d41ca1",
+          "instanceId": "76a82a43-598e-47b5-90db-418445d41ca1",
+          "serialNumber": "42",
+          "mintedAt": "2026-09-22T15:12:08.000Z",
+          "definition": {
+            "id": "2f5a4e16-4897-4268-af51-764a1954e31e",
+            "canonicalId": "wikidata:Q937",
+            "wikidataId": "Q937",
+            "source": {
+              "provider": "wikipedia",
+              "language": "en",
+              "pageId": "736",
+              "url": "https://en.wikipedia.org/wiki/Albert_Einstein"
+            },
+            "presentation": {
+              "title": "Albert Einstein",
+              "description": "German-born theoretical physicist",
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Albert_Einstein_Head.jpg?width=900"
+            }
+          },
+          "extensions": {
+            "org.wikicard.game.v1": {
+              "rarity": "MYTHIC",
+              "rarityVersion": 1,
+              "attack": 9350,
+              "defense": 8840,
+              "power": 9170,
+              "statsVersion": 1
+            }
+          }
+        },
+        {
+          "id": "urn:uuid:60f5c9ca-fc58-4d0e-97b7-3865f7f1fd94",
+          "instanceId": "60f5c9ca-fc58-4d0e-97b7-3865f7f1fd94",
+          "serialNumber": "128",
+          "mintedAt": "2026-09-23T10:22:11.000Z",
+          "definition": {
+            "id": "f537e50c-2700-4b98-815b-3064639f4434",
+            "canonicalId": "wikidata:Q7186",
+            "wikidataId": "Q7186",
+            "source": {
+              "provider": "wikipedia",
+              "language": "en",
+              "pageId": "20403",
+              "url": "https://en.wikipedia.org/wiki/Marie_Curie"
+            },
+            "presentation": {
+              "title": "Marie Curie",
+              "description": "Polish and naturalized-French physicist and chemist",
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Portrait_of_Marie_Curie.jpg?width=900"
+            }
+          },
+          "extensions": {
+            "org.wikicard.game.v1": {
+              "rarity": "LEGENDARY",
+              "rarityVersion": 1,
+              "attack": 8720,
+              "defense": 9010,
+              "power": 8885,
+              "statsVersion": 1
+            }
+          }
+        },
+        {
+          "id": "urn:uuid:cd010935-0063-4eaf-bca9-4d2b4ef59e66",
+          "instanceId": "cd010935-0063-4eaf-bca9-4d2b4ef59e66",
+          "serialNumber": "314",
+          "mintedAt": "2026-09-24T09:01:44.000Z",
+          "definition": {
+            "id": "21d59ef3-4805-49c0-b8ba-f9a81799a995",
+            "canonicalId": "wikidata:Q7259",
+            "wikidataId": "Q7259",
+            "source": {
+              "provider": "wikipedia",
+              "language": "en",
+              "pageId": "974",
+              "url": "https://en.wikipedia.org/wiki/Ada_Lovelace"
+            },
+            "presentation": {
+              "title": "Ada Lovelace",
+              "description": "English mathematician and writer",
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ada_Lovelace_portrait.jpg?width=900"
+            }
+          },
+          "extensions": {
+            "org.wikicard.game.v1": {
+              "rarity": "ULTRA_RARE",
+              "rarityVersion": 1,
+              "attack": 8120,
+              "defense": 7890,
+              "power": 8005,
+              "statsVersion": 1
+            }
+          }
+        },
+        {
+          "id": "urn:uuid:f6b4298c-4103-49e1-863f-631ae2d5a85a",
+          "instanceId": "f6b4298c-4103-49e1-863f-631ae2d5a85a",
+          "serialNumber": "512",
+          "mintedAt": "2026-09-25T14:48:30.000Z",
+          "definition": {
+            "id": "fcd33d7c-7831-482e-b723-eb854a1becba",
+            "canonicalId": "wikidata:Q7251",
+            "wikidataId": "Q7251",
+            "source": {
+              "provider": "wikipedia",
+              "language": "en",
+              "pageId": "1208",
+              "url": "https://en.wikipedia.org/wiki/Alan_Turing"
+            },
+            "presentation": {
+              "title": "Alan Turing",
+              "description": "English mathematician and computer scientist",
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Alan_Turing_Aged_16.jpg?width=900"
+            }
+          },
+          "extensions": {
+            "org.wikicard.game.v1": {
+              "rarity": "RARE",
+              "rarityVersion": 1,
+              "attack": 7640,
+              "defense": 7410,
+              "power": 7525,
+              "statsVersion": 1
+            }
+          }
+        },
+        {
+          "id": "urn:uuid:0aeb328c-b569-46d0-bc6a-c9143da87df0",
+          "instanceId": "0aeb328c-b569-46d0-bc6a-c9143da87df0",
+          "serialNumber": "1024",
+          "mintedAt": "2026-09-26T17:05:00.000Z",
+          "definition": {
+            "id": "5d294159-a463-49ed-9319-ab24da7fca20",
+            "canonicalId": "wikidata:Q243",
+            "wikidataId": "Q243",
+            "source": {
+              "provider": "wikipedia",
+              "language": "en",
+              "pageId": "9232",
+              "url": "https://en.wikipedia.org/wiki/Eiffel_Tower"
+            },
+            "presentation": {
+              "title": "Eiffel Tower",
+              "description": "Wrought-iron lattice tower in Paris, France",
+              "imageUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/EiffelTower.jpg?width=900"
+            }
+          },
+          "extensions": {
+            "org.wikicard.game.v1": {
+              "rarity": "COMMON",
+              "rarityVersion": 1,
+              "attack": 4920,
+              "defense": 6180,
+              "power": 5550,
+              "statsVersion": 1
+            }
+          }
+        }
+      ]
+    }
+  },
+  "proof": {
+    "type": "Ed25519Signature",
+    "algorithm": "Ed25519",
+    "canonicalization": "WIKICARD-C14N-JSON-1",
+    "keyId": "ed25519-sha256-demo-public-key-fingerprint",
+    "payloadHash": "DEMO_PAYLOAD_HASH_NOT_A_REAL_SIGNATURE",
+    "signature": "DEMO_SIGNATURE_NOT_CRYPTOGRAPHICALLY_VALID"
+  }
+}
