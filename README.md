@@ -17,7 +17,7 @@ The project includes production-oriented SDKs, framework examples, machine-reada
 
 A static browser-only viewer is included for understanding the data produced by an export:
 
-**https://alexistb2904.github.io/portable-collection-protocol/viewer/**
+**https://alexistb2904.github.io/portable-collection-protocol/viewer**
 
 It loads a representative demo by default and can open a local export without uploading it anywhere. The viewer displays the proof envelope but deliberately does **not** claim cryptographic verification or current ownership.
 

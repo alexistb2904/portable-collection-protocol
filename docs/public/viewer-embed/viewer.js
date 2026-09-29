@@ -67,6 +67,18 @@ let renderFrame = null;
 let loadFrame = null;
 let exportRevision = 0;
 let rawRenderedRevision = -1;
+let hostResizeObserver = null;
+
+function notifyHostHeight() {
+  if (window.parent === window) return;
+  window.parent.postMessage(
+    {
+      type: "portable-collection-viewer:height",
+      height: Math.ceil(document.documentElement.scrollHeight),
+    },
+    "*",
+  );
+}
 
 function safeHttpUrl(value) {
   try {
@@ -663,6 +675,7 @@ function render(exported, sourceLabel) {
   setSummary(currentExport);
   renderCards(currentExport);
   renderRawJsonIfNeeded();
+  requestAnimationFrame(notifyHostHeight);
 }
 
 async function loadDemo() {
@@ -702,12 +715,21 @@ refs.resetDemo.addEventListener("click", () => {
   void loadDemo();
 });
 
-refs.rawPanel.addEventListener("toggle", renderRawJsonIfNeeded);
+refs.rawPanel.addEventListener("toggle", () => {
+  renderRawJsonIfNeeded();
+  requestAnimationFrame(notifyHostHeight);
+});
 
 window.addEventListener("beforeunload", () => {
   resizeObserver?.disconnect();
+  hostResizeObserver?.disconnect();
   destroyVirtualizer();
 });
+
+hostResizeObserver = new ResizeObserver(() => notifyHostHeight());
+hostResizeObserver.observe(document.documentElement);
+window.addEventListener("load", notifyHostHeight);
+window.addEventListener("resize", notifyHostHeight);
 
 setupResizeObserver();
 void loadDemo();

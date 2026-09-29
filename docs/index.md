@@ -14,7 +14,7 @@ hero:
       link: /protocol
     - theme: alt
       text: Open Export Viewer
-      link: /viewer/
+      link: /viewer
 features:
   - title: Signed exports
     details: Deterministic JSON and Ed25519 signatures protect integrity and identify the issuer.

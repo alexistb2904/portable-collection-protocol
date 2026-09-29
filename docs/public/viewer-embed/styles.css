@@ -1005,3 +1005,19 @@ button, input { font: inherit; }
   .card-instance-meta { display: none; }
   .virtual-footer { align-items: flex-start; flex-direction: column; }
 }
+
+
+/* Embedded inside the VitePress /viewer page: site chrome stays owned by VitePress. */
+body.embedded-viewer {
+  background: transparent;
+}
+
+.embedded-viewer .viewer-shell {
+  width: 100%;
+  max-width: 1500px;
+  padding: 20px 0 36px;
+}
+
+.embedded-viewer .intro {
+  margin-top: 0;
+}

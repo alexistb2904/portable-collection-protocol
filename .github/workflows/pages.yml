@@ -48,10 +48,11 @@ jobs:
       - name: Verify Pages artifact
         run: |
           test -f docs/.vitepress/dist/index.html
-          test -f docs/.vitepress/dist/viewer/index.html
-          test -f docs/.vitepress/dist/viewer/viewer.js
-          test -f docs/.vitepress/dist/viewer/styles.css
-          test -f docs/.vitepress/dist/viewer/sample-export.json
+          test -f docs/.vitepress/dist/viewer.html
+          test -f docs/.vitepress/dist/viewer-embed/index.html
+          test -f docs/.vitepress/dist/viewer-embed/viewer.js
+          test -f docs/.vitepress/dist/viewer-embed/styles.css
+          test -f docs/.vitepress/dist/viewer-embed/sample-export.json
           touch docs/.vitepress/dist/.nojekyll
 
       - uses: actions/configure-pages@v5
