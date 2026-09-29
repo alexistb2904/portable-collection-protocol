@@ -1,5 +1,5 @@
 import express, { type NextFunction, type Request, type Response } from "express";
-import Redis from "ioredis";
+import { Redis } from "ioredis";
 import { z } from "zod";
 import { signCollection } from "@wikicard/portable-collection-core";
 import {
