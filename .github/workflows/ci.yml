@@ -65,18 +65,19 @@ jobs:
 
       - name: Check static viewer
         run: |
-          node --check docs/public/viewer/viewer.js
-          node -e "JSON.parse(require('node:fs').readFileSync('docs/public/viewer/sample-export.json','utf8'))"
+          node --check docs/public/viewer-embed/viewer.js
+          node -e "JSON.parse(require('node:fs').readFileSync('docs/public/viewer-embed/sample-export.json','utf8'))"
 
       - name: Build docs
         run: pnpm docs:build
 
       - name: Verify viewer output
         run: |
-          test -f docs/.vitepress/dist/viewer/index.html
-          test -f docs/.vitepress/dist/viewer/viewer.js
-          test -f docs/.vitepress/dist/viewer/styles.css
-          test -f docs/.vitepress/dist/viewer/sample-export.json
+          test -f docs/.vitepress/dist/viewer.html
+          test -f docs/.vitepress/dist/viewer-embed/index.html
+          test -f docs/.vitepress/dist/viewer-embed/viewer.js
+          test -f docs/.vitepress/dist/viewer-embed/styles.css
+          test -f docs/.vitepress/dist/viewer-embed/sample-export.json
 
   python-sdk:
     name: Python SDK ${{ matrix.python }}
