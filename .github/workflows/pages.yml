@@ -45,6 +45,15 @@ jobs:
           DOCS_BASE: /portable-collection-protocol/
         run: pnpm docs:build
 
+      - name: Verify Pages artifact
+        run: |
+          test -f docs/.vitepress/dist/index.html
+          test -f docs/.vitepress/dist/viewer/index.html
+          test -f docs/.vitepress/dist/viewer/viewer.js
+          test -f docs/.vitepress/dist/viewer/styles.css
+          test -f docs/.vitepress/dist/viewer/sample-export.json
+          touch docs/.vitepress/dist/.nojekyll
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v4

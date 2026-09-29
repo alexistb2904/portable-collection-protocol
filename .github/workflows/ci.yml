@@ -71,6 +71,13 @@ jobs:
       - name: Build docs
         run: pnpm docs:build
 
+      - name: Verify viewer output
+        run: |
+          test -f docs/.vitepress/dist/viewer/index.html
+          test -f docs/.vitepress/dist/viewer/viewer.js
+          test -f docs/.vitepress/dist/viewer/styles.css
+          test -f docs/.vitepress/dist/viewer/sample-export.json
+
   python-sdk:
     name: Python SDK ${{ matrix.python }}
     runs-on: ubuntu-latest
